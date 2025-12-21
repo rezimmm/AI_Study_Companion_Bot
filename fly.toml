@@ -1,0 +1,16 @@
+app = "ai-study-companian-bot"
+primary_region = "bom"
+
+[build]
+
+[processes]
+  app = "python bot.py"
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[[vm]]
+  memory = "1gb"
+  cpu_kind = "shared"
+  cpus = 1
