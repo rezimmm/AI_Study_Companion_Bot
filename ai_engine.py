@@ -1,3 +1,6 @@
+
+# Built By Rezim Titoria
+
 import os
 import requests
 import json
@@ -48,3 +51,4 @@ def ask_ai(prompt):
     except Exception as e:
         print("GEMINI ERROR:", e)
         return "❌ AI processing failed."
+
