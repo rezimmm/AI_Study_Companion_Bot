@@ -1,3 +1,6 @@
+
+# Built By Rezim Titoria
+
 from fastapi import FastAPI
 from pymongo import MongoClient
 from pydantic import BaseModel
@@ -25,3 +28,4 @@ def save_pdf(data: PDFData):
 def get_notes(user_id: int):
     docs = list(db.documents.find({"user_id": user_id}, {"_id":0}))
     return docs
+
