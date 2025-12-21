@@ -1,3 +1,6 @@
+
+# Built By Rezim Titoria
+
 import PyPDF2
 
 def extract_pdf_text(file_path):
@@ -6,3 +9,4 @@ def extract_pdf_text(file_path):
     for page in reader.pages:
         text += page.extract_text()
     return text
+
