@@ -686,7 +686,7 @@ MAX_SIZE = 20 * 1024 * 1024  # 20MB Telegram Bot Limit
 
 @router.message(F.document)
 async def handle_pdf(msg: Message):
-    uid = msg.from_user.id
+    uid = str(msg.from_user.id)
 
     if uid not in user_mode:
         await msg.answer("⚠ Please choose:\n🧠 Summary or 📚 Quiz first")
