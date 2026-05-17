@@ -271,8 +271,8 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="Only PDF allowed")
 
     # Optional safety limit (prevents crashes)
-    if file.size and file.size > 15_000_000:     # 15MB
-        raise HTTPException(status_code=400, detail="PDF too large")
+    if file.size and file.size > 100_000_000:     # 100MB
+        raise HTTPException(status_code=400, detail="PDF too large (Max 100MB)")
 
     # -------- Save Temporary --------
     session_id = str(uuid.uuid4())
