@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Broadcast</title>
+
+<link rel="stylesheet"
+ href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
+
+body{
+    background: radial-gradient(circle at top,#0e1225,#000814);
+    color:#fff;
+    font-family:"Poppins",sans-serif;
+    min-height:100vh;
+}
+
+/* Center Layout */
+.wrapper{
+    max-width:900px;
+    margin:auto;
+    margin-top:60px;
+}
+
+/* Glass Card */
+.card-box{
+    background:rgba(10,15,35,.9);
+    padding:35px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 0 45px rgba(0,0,0,.7);
+    backdrop-filter:blur(10px);
+    position:relative;
+}
+
+/* Neon Glow Border */
+.card-box::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius:18px;
+    background:linear-gradient(45deg,#7c4dff,#00eaff,#ff00ff);
+    filter:blur(18px);
+    opacity:.35;
+    z-index:-1;
+}
+
+h2{
+    font-weight:800;
+}
+
+/* Textarea Styling */
+textarea{
+    background:#050a18 !important;
+    color:white !important;
+    border:1px solid #3c4a7a !important;
+    border-radius:12px !important;
+}
+
+textarea:focus{
+    box-shadow:0 0 15px rgba(124,77,255,.7);
+}
+
+/* Button */
+.btn-send{
+    background:linear-gradient(45deg,#7c4dff,#9b59ff);
+    border:none;
+    border-radius:10px;
+    padding:12px 22px;
+    font-size:16px;
+    transition:.2s;
+}
+
+.btn-send:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(124,77,255,.6);
+}
+
+/* Character Counter */
+.counter{
+    text-align:right;
+    font-size:14px;
+    opacity:.7;
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="wrapper">
+<div class="card-box">
+
+<h2>📢 Broadcast Message</h2>
+<p class="text-light">Send announcement to all users instantly</p>
+
+<hr>
+
+<form method="POST" action="/admin/broadcast">
+
+<input type="hidden" name="key" value="{{request.query_params.key}}">
+
+<textarea 
+ class="form-control mt-2"
+ name="message"
+ rows="6"
+ maxlength="1000"
+ placeholder="Type your broadcast message here..."
+ oninput="updateCounter()"
+ required></textarea>
+
+<p class="counter" id="counter">0 / 1000</p>
+
+<button class="btn btn-send mt-2">🚀 Send Broadcast</button>
+
+</form>
+
+</div>
+</div>
+
+
+<script>
+function updateCounter(){
+ let box=document.querySelector("textarea");
+ document.getElementById("counter").innerText=
+ box.value.length+" / "+box.maxLength;
+}
+</script>
+
+</body>
+</html>

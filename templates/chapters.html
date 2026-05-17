@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Select Chapter</title>
+
+<link rel="stylesheet"
+ href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css">
+
+<style>
+
+body{
+    background: radial-gradient(circle at top, #1d1d39, #050509);
+    color:white;
+    min-height:100vh;
+    margin:0;
+    padding:40px;
+    font-family: "Segoe UI", sans-serif;
+    display:flex;
+    justify-content:center;
+}
+
+.container-box{
+    max-width:950px;
+    width:100%;
+    background:rgba(10,10,20,0.85);
+    border-radius:18px;
+    padding:35px;
+    border:1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(18px);
+    box-shadow:0 0 55px rgba(0,0,0,0.8);
+}
+
+/* Title */
+.title{
+    font-size:32px;
+    font-weight:800;
+}
+
+/* Chapter Cards */
+.chapter-card{
+    background:linear-gradient(145deg,#10101b,#0b0b14);
+    padding:18px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,0.1);
+    margin-bottom:12px;
+    cursor:pointer;
+    transition:0.25s;
+    color:white;
+}
+
+.chapter-card:hover{
+    background:#1c1c2b;
+    transform:translateY(-2px) scale(1.01);
+    border:1px solid rgba(120,140,255,0.6);
+    box-shadow:0 0 18px rgba(120,140,255,0.4);
+}
+
+.chapter-title{
+    font-size:18px;
+    font-weight:700;
+}
+
+.page-badge{
+    background:#7c4dff;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:13px;
+}
+
+/* No TOC */
+.not-found{
+    padding:18px;
+    border-radius:12px;
+    background:#261b1b;
+    border:1px solid #c06565;
+}
+
+/* Back Button */
+.back-btn{
+    background:#2e2e46;
+    padding:10px 20px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.2);
+    color:white;
+    text-decoration:none;
+    transition:0.2s;
+}
+
+.back-btn:hover{
+    background:#4d4d6f;
+    transform:scale(1.04);
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container-box">
+
+    <h2 class="title">📚 Select Chapter to Summarize</h2>
+
+    <p>
+        <b>📄 File:</b> {{ filename }}
+    </p>
+
+    <hr>
+
+    {% if chapters|length == 0 %}
+        <div class="not-found">
+            ❌ No Table of Contents found.  
+            (Some PDFs do not include TOC metadata.)
+        </div>
+    {% else %}
+        {% for c in chapters %}
+            <a class="text-decoration-none" href="/summarize_chapter?index={{loop.index0}}">
+                <div class="chapter-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="chapter-title">{{c.title}}</span>
+                        <span class="page-badge">📖 Page {{c.page}}</span>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    {% endif %}
+
+    <a href="/upload" class="back-btn mt-4 d-inline-block">⬅ Back</a>
+
+</div>
+
+</body>
+</html>

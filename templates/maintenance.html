@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Maintenance Mode</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background: radial-gradient(circle at top, #0c0c3a, #020211);
+  color:white;
+  font-family:"Poppins",sans-serif;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+
+/* Floating lights */
+.circle{
+  position:absolute;
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  filter:blur(60px);
+  opacity:.6;
+  animation:float 6s infinite alternate ease-in-out;
+}
+
+.c1{background:#6b5bff; top:5%; left:10%;}
+.c2{background:#ff6b9c; bottom:5%; right:15%;}
+.c3{background:#33ff88; top:60%; left:20%;}
+
+@keyframes float{
+  to{transform:translateY(-40px) translateX(40px);}
+}
+
+/* Main Box */
+.box{
+  position:relative;
+  background:linear-gradient(160deg,#0a0f2a,#121a3d);
+  border-radius:20px;
+  padding:45px;
+  width:550px;
+  text-align:center;
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:0 0 50px rgba(120,120,255,.7);
+  backdrop-filter:blur(10px);
+}
+
+/* Glowing Border Animation */
+.box::before{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border-radius:22px;
+  background:conic-gradient(#6b5bff, #ff6b9c, #33ff88, #6b5bff);
+  filter:blur(12px);
+  z-index:-1;
+  animation:spin 5s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
+
+/* Title */
+h1{
+  font-size:42px;
+  margin-bottom:10px;
+  text-shadow:0 0 25px rgba(255,255,255,.6);
+}
+
+/* Warning Pulse */
+.badge{
+  display:inline-block;
+  padding:10px 18px;
+  border-radius:25px;
+  background:#ff4d6d33;
+  border:1px solid #ff4d6d;
+  color:#ff4d6d;
+  font-weight:700;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  0%{transform:scale(1); box-shadow:0 0 15px rgba(255,77,109,.6);}
+  50%{transform:scale(1.08); box-shadow:0 0 30px rgba(255,77,109,1);}
+  100%{transform:scale(1); box-shadow:0 0 15px rgba(255,77,109,.6);}
+}
+
+/* Details text */
+p{
+  color:#d6d6ff;
+  margin-top:12px;
+  font-size:17px;
+}
+
+.reason{
+  margin-top:18px;
+  padding:12px;
+  background:#0c1238;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.2);
+}
+
+.time{
+  margin-top:10px;
+  opacity:.8;
+}
+
+</style>
+</head>
+<body>
+
+<div class="circle c1"></div>
+<div class="circle c2"></div>
+<div class="circle c3"></div>
+
+<div class="box">
+  <div class="badge">🚧 Maintenance Mode Enabled</div>
+
+  <h1>Service Paused</h1>
+  <p>Our system is temporarily unavailable while we fix or upgrade something.</p>
+
+  <div class="reason">
+    <strong>Reason:</strong><br>
+    {{reason}}
+  </div>
+
+  <p class="time">⏰ Last Triggered: {{time}}</p>
+</div>
+
+</body>
+</html>

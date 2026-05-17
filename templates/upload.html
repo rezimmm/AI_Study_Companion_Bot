@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Upload PDF</title>
+
+<link rel="stylesheet"
+ href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css">
+
+<style>
+
+body{
+    background: radial-gradient(circle at top, #1f1f3a, #050509);
+    color:white;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Glass Card */
+.box{
+    width: 760px;
+    padding:40px;
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,0.15);
+    background: rgba(15,15,25,0.8);
+    backdrop-filter: blur(16px);
+    box-shadow:0 0 60px rgba(0,0,0,0.7);
+}
+
+/* Heading */
+.title{
+    font-size:28px;
+    font-weight:800;
+}
+
+/* Upload Area */
+.upload{
+    background:rgba(255,255,255,0.04);
+    border:2px dashed #6b7bff;
+    padding:30px;
+    border-radius:14px;
+    transition:0.3s;
+    text-align:center;
+}
+
+.upload:hover{
+    border-color:#9fa8ff;
+    background:rgba(255,255,255,0.08);
+}
+
+/* Button Glow */
+.btn-glow{
+    background:#7c4dff;
+    border:none;
+    padding:12px 22px;
+    border-radius:10px;
+    transition:0.3s;
+    font-size:17px;
+}
+
+.btn-glow:hover{
+    background:#9a6dff;
+    transform:scale(1.04);
+    box-shadow:0 0 20px rgba(156,122,255,0.6);
+}
+
+/* Divider Line */
+.line{
+    height:1px;
+    width:100%;
+    background:linear-gradient(to right, transparent, #3a3a5a, transparent);
+    margin:18px 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+    <h2 class="title">📤 Upload Your Study PDF</h2>
+    <p class="text-light mb-1">
+        AI will create smart **summaries + quizzes** to help you study better
+    </p>
+
+    <div class="line"></div>
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+
+        <div class="upload mb-3">
+            <h5>Drag & Drop PDF here</h5>
+            <small class="text-secondary">or click below to browse</small>
+
+            <input class="form-control mt-3" type="file" name="file" accept="application/pdf" required>
+        </div>
+
+        <button class="btn btn-glow w-100">
+            Upload & Continue →
+        </button>
+    </form>
+</div>
+
+</body>
+</html>

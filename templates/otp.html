@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Verify OTP</title>
+
+<link rel="stylesheet"
+ href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
+
+/* ================= BASE THEME ================= */
+body{
+    height:100vh;
+    margin:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:radial-gradient(circle at top,#0b0f2a,#000614);
+    color:white;
+    font-family:"Poppins",sans-serif;
+    overflow:hidden;
+    transition:.4s;
+}
+
+/********* LIGHT MODE *********/
+body.light{
+    background:radial-gradient(circle at top,#e8ecff,#ffffff);
+    color:#222;
+}
+body.light .box{
+    background:rgba(255,255,255,.8);
+    border:1px solid rgba(0,0,0,.1);
+}
+body.light .secure{
+    background:#e6e9ff;
+}
+body.light input{
+    background:#fff!important;
+    color:#000!important;
+    border:1px solid #6d5cff!important;
+}
+body.light button{
+   background:linear-gradient(45deg,#6f4dff,#4f75ff);
+}
+body.light .note{
+    color:#333;
+}
+
+/******** Animated Orbs ********/
+.bg-orb{
+    position:absolute;
+    filter:blur(70px);
+    opacity:.4;
+}
+.orb1{width:300px;height:300px;background:#6f00ff;top:5%;left:-80px;}
+.orb2{width:400px;height:400px;background:#00eaff;right:-120px;bottom:0;}
+.orb3{width:250px;height:250px;background:#ff00ff;left:40%;top:60%;}
+
+/******** Card ********/
+.box{
+    width:440px;
+    padding:35px;
+    border-radius:18px;
+    background:rgba(10,15,40,.8);
+    border:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(12px);
+    position:relative;
+    box-shadow:0 0 50px rgba(0,0,0,.7);
+}
+.box::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius:18px;
+    background:linear-gradient(45deg,#7c4dff,#00eaff,#ff00ff);
+    z-index:-1;
+    filter:blur(18px);
+    opacity:.35;
+}
+
+/******** OTP Input ********/
+input{
+    background:#040b1a !important;
+    border:1px solid #4f63ff !important;
+    color:white !important;
+    border-radius:12px !important;
+    text-align:center;
+    font-size:22px;
+    letter-spacing:5px;
+}
+input:focus{
+    box-shadow:0 0 12px rgba(124,77,255,.7);
+}
+
+/******** Button ********/
+button{
+    width:100%;
+    border-radius:10px;
+    background:linear-gradient(45deg,#7c4dff,#9b59ff);
+    border:none;
+    padding:12px;
+    font-size:17px;
+    transition:.2s;
+}
+button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 15px 30px rgba(124,77,255,.5);
+}
+
+/******** Secure Badge ********/
+.secure{
+    background:#111a3d;
+    padding:6px 12px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,.15);
+    font-size:13px;
+    display:inline-block;
+    margin-bottom:10px;
+}
+.note{opacity:.7;font-size:14px;}
+
+/******** Loader ********/
+.loader{
+    display:none;
+    margin-top:10px;
+    text-align:center;
+}
+.loader span{
+    width:10px;
+    height:10px;
+    background:white;
+    display:inline-block;
+    border-radius:50%;
+    margin:0 3px;
+    animation:bounce .6s infinite alternate;
+}
+.loader span:nth-child(2){animation-delay:.2s}
+.loader span:nth-child(3){animation-delay:.4s}
+
+@keyframes bounce{
+  to{transform:translateY(-8px)}
+}
+
+/******** Shake Animation ********/
+.shake{
+ animation:shake .4s;
+}
+@keyframes shake{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-6px)}
+  50%{transform:translateX(6px)}
+  75%{transform:translateX(-4px)}
+  100%{transform:translateX(0)}
+}
+
+/******** Theme Toggle ********/
+.theme-toggle{
+    position:absolute;
+    top:15px;
+    right:15px;
+    cursor:pointer;
+    font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
+
+<div class="box">
+
+<div class="theme-toggle" onclick="toggleTheme()">🌙</div>
+
+<span class="secure">🛡️ Secure Verification</span>
+
+<h2>🔐 Verify OTP</h2>
+<p class="note">
+Enter the 6-digit OTP sent to your Telegram.  
+⏳ Expires in 5 minutes.
+</p>
+
+<form method="post" action="/admin/verify_otp" onsubmit="return handleVerify()">
+
+<input
+ class="form-control mt-3"
+ type="text"
+ id="otp"
+ name="otp"
+ maxlength="6"
+ placeholder="Enter OTP"
+ required>
+
+<button class="mt-3" id="verifyBtn">
+ Verify & Continue
+</button>
+
+<div class="loader" id="loading">
+ <span></span><span></span><span></span>
+ <p style="font-size:12px;opacity:.7">Verifying...</p>
+</div>
+
+</form>
+
+<button class="btn btn-outline-light mt-3" id="resendBtn" onclick="resendOtp()">
+ 🔄 Resend OTP
+</button>
+
+<p class="note mt-3">Do not share this code with anyone.</p>
+
+</div>
+
+<script>
+/******** Loading + Shake ********/
+function handleVerify(){
+ let otp = document.getElementById("otp");
+ if(otp.value.length !== 6){
+   otp.classList.add("shake");
+   setTimeout(()=>otp.classList.remove("shake"),400);
+   return false;
+ }
+
+ document.getElementById("verifyBtn").style.display="none";
+ document.getElementById("loading").style.display="block";
+ return true;
+}
+
+/******** Resend OTP ********/
+/******** Resend OTP ********/
+let resendAllowed = true;
+
+async function resendOtp(){
+ if(!resendAllowed) return;
+
+ resendAllowed = false;
+ let btn = document.getElementById("resendBtn");
+ btn.innerText = "⏳ Sending...";
+ btn.disabled = true;
+
+ try{
+    let res = await fetch("/admin/resend_otp");
+    let data = await res.json();
+
+    if(data.status){
+        alert("📩 New OTP sent to Telegram!");
+    } else {
+        alert("⚠ " + data.msg);
+    }
+
+ } catch(e){
+    alert("❌ Failed to contact server");
+ }
+
+ // 30s Cooldown
+ setTimeout(()=>{
+   resendAllowed = true;
+   btn.innerText = "🔄 Resend OTP";
+   btn.disabled = false;
+ },30000);
+}
+
+
+/******** Theme Toggle ********/
+function toggleTheme(){
+ document.body.classList.toggle("light");
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Bot Status Monitor</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+ --bg:#020213;
+ --card:#0c1133;
+ --text:white;
+ --glow:#9f6bff;
+}
+
+.light{
+ --bg:white;
+ --card:#f4f6ff;
+ --text:#111;
+ --glow:#6b5bff;
+}
+
+*{
+ transition: all .5s ease-in-out;
+}
+
+body{
+ background: radial-gradient(circle at top,#05051a,var(--bg));
+ color:var(--text);
+ font-family:"Poppins";
+ min-height:100vh;
+}
+
+/* floating animated boxes */
+.box{
+ background:var(--card);
+ padding:25px;
+ border-radius:18px;
+ border:1px solid rgba(255,255,255,.15);
+ box-shadow:0 0 35px rgba(0,0,0,.6);
+ animation: float 5s infinite ease-in-out;
+}
+
+@keyframes float{
+ 0%{transform:translateY(0)}
+ 50%{transform:translateY(-6px)}
+ 100%{transform:translateY(0)}
+}
+
+.status-pill{
+ padding:8px 16px;
+ border-radius:25px;
+ font-weight:600;
+}
+
+.running{
+ background:#32ff9b33;
+ color:#32ff9b;
+ border:1px solid #32ff9b66;
+}
+
+.toggle{
+ padding:8px 16px;
+ border-radius:10px;
+ border:none;
+}
+
+</style>
+</head>
+
+<body class="p-4">
+
+<div class="container box">
+
+  <div class="d-flex justify-content-between align-items-center">
+    <h2>🤖 AI Bot Health Monitor</h2>
+    <button onclick="toggleTheme()" class="toggle btn btn-warning">🌈 Theme</button>
+  </div>
+
+  <hr>
+
+  <h4>Status:
+    <span class="status-pill running">Running</span>
+  </h4>
+
+  <br>
+
+  <div class="row text-center">
+
+    <div class="col-md-3 box m-2">
+      <h1 id="users">0</h1>
+      <p>Active Users</p>
+    </div>
+
+    <div class="col-md-3 box m-2">
+      <h1 id="uptime">0%</h1>
+      <p>Uptime (Last 24 Hours)</p>
+    </div>
+
+    <div class="col-md-3 box m-2">
+      <h1 id="cpu">0%</h1>
+      <p>CPU Usage</p>
+    </div>
+
+    <div class="col-md-3 box m-2">
+      <h1 id="ram">0%</h1>
+      <p>Memory Usage</p>
+    </div>
+
+  </div>
+
+  <br>
+
+  <div class="row">
+
+    <div class="col-md-6 box">
+      <h4>🧠 AI Latency Graph</h4>
+      <canvas id="latencyChart"></canvas>
+    </div>
+
+    <div class="col-md-6 box">
+      <h4>📊 System Load</h4>
+      <canvas id="loadChart"></canvas>
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+// THEME SWITCH
+function toggleTheme(){
+ document.body.classList.toggle("light");
+}
+
+// LATENCY CHART
+let latencyChart = new Chart(document.getElementById("latencyChart"), {
+ type:"line",
+ data:{
+  labels:Array(20).fill(""),
+  datasets:[{
+   label:"Response Time (ms)",
+   data:[],
+   borderColor:"#9f6bff",
+   borderWidth:3,
+   tension:.4
+  }]
+ }
+});
+
+// LOAD CHART
+let loadChart = new Chart(document.getElementById("loadChart"), {
+ type:"bar",
+ data:{
+  labels:["CPU","RAM"],
+  datasets:[{
+   data:[0,0],
+   backgroundColor:["#6b5bff","#33ff88"]
+  }]
+ }
+});
+
+// REALTIME FETCH
+async function fetchStatus(){
+ let res = await fetch("/admin/live_status");
+ let data = await res.json();
+
+ document.getElementById("users").innerText = data.users;
+ document.getElementById("cpu").innerText = data.cpu + "%";
+ document.getElementById("ram").innerText = data.memory + "%";
+ document.getElementById("uptime").innerText = data.uptime_percent + "%";
+
+ // Latency graph from DB
+ latencyChart.data.datasets[0].data = data.latency_graph;
+ latencyChart.update();
+
+ // System load
+ loadChart.data.datasets[0].data=[data.cpu, data.memory];
+ loadChart.update();
+}
+
+setInterval(fetchStatus, 1500);
+fetchStatus();
+
+</script>
+
+</body>
+</html>

@@ -2,15 +2,27 @@ app = "ai-study-companian-bot"
 primary_region = "bom"
 
 [build]
+  dockerfile = "Dockerfile"
 
 [processes]
-  app = "python bot.py"
-
-[experimental]
-  allowed_public_ports = []
-  auto_rollback = true
+  app = "uvicorn bot:app --host 0.0.0.0 --port 8080"
 
 [[vm]]
   memory = "1gb"
   cpu_kind = "shared"
   cpus = 1
+
+[http_service]
+  processes = ["app"]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+
+  [[http_service.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[http_service.ports]]
+    port = 443
+    handlers = ["tls", "http"]

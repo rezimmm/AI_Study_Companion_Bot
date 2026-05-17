@@ -1,6 +1,3 @@
-
-# Built By Rezim Titoria
-
 import os
 import requests
 import json
@@ -12,8 +9,7 @@ GEMINI_KEY = (os.getenv("GEMINI_KEY") or "").strip()
 print("LOADED GEMINI KEY:", GEMINI_KEY[:8], "...")
 
 # ⭐ This model exists in YOUR account
-MODEL = "gemini-flash-latest"
-
+MODEL = "models/gemini-2.5-flash"
 
 def ask_ai(prompt):
     try:
@@ -51,4 +47,3 @@ def ask_ai(prompt):
     except Exception as e:
         print("GEMINI ERROR:", e)
         return "❌ AI processing failed."
-
