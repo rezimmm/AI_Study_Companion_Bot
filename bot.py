@@ -665,7 +665,7 @@ async def start(msg: Message):
 @router.message(F.text == "🧠 Summarise PDF")
 @router.message(Command("summarize", "summarise"))
 async def set_summary(msg: Message):
-    uid = msg.from_user.id
+    uid = str(msg.from_user.id)
     user_mode[uid] = "summary"
     await msg.answer("📥 Upload PDF to summarize by chapters.")
 
@@ -673,7 +673,7 @@ async def set_summary(msg: Message):
 @router.message(F.text == "📚 Quiz")
 @router.message(Command("quiz"))
 async def set_quiz(msg: Message):
-    uid = msg.from_user.id
+    uid = str(msg.from_user.id)
     user_mode[uid] = "quiz"
     await msg.answer("📥 Upload PDF to generate quiz questions.")
 
@@ -857,7 +857,7 @@ D) {q['D']}
 # -------- ANSWER CHECK ----------
 @router.callback_query(F.data.startswith("ans_"))
 async def check_answer(call: CallbackQuery):
-    uid = call.from_user.id
+    uid = str(call.from_user.id)
     quiz = user_quiz[uid]
 
     chosen = call.data[-1]
@@ -876,7 +876,7 @@ async def check_answer(call: CallbackQuery):
 # ---------- SUMMARY + BOOKMARK ----------
 @router.callback_query(F.data.startswith("ch_"))
 async def summarize_chapter(call: CallbackQuery):
-    uid = call.from_user.id
+    uid = str(call.from_user.id)
     index = int(call.data.split("_")[1])
 
     text = user_chapters[uid][index]
@@ -902,7 +902,7 @@ async def summarize_chapter(call: CallbackQuery):
 # ---------- SAVE BOOKMARK ----------
 @router.callback_query(F.data.startswith("bm_"))
 async def save_bookmark(call: CallbackQuery):
-    uid = call.from_user.id
+    uid = str(call.from_user.id)
     ch = int(call.data.split("_")[1])
 
     await call.message.answer(f"✅ Chapter {ch+1} bookmarked successfully!")
@@ -912,7 +912,7 @@ async def save_bookmark(call: CallbackQuery):
 @router.message(F.text == "🔖 Bookmark")
 @router.message(Command("bookmarks"))
 async def show_bookmarks(msg: Message):
-    uid = msg.from_user.id
+    uid = str(msg.from_user.id)
 
     if uid not in user_bookmarks or len(user_bookmarks[uid]) == 0:
         await msg.answer("📭 No bookmarks saved yet.")
