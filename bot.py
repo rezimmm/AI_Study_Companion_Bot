@@ -159,6 +159,7 @@ async def get_chapters(request: Request):
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 GEMINI_KEY = os.getenv("GEMINI_KEY")
+WEB_URL = os.getenv("WEB_URL", "https://ai-study-companion-bot.onrender.com")
 
 if not BOT_TOKEN:
     print("❌ BOT_TOKEN missing in .env")
@@ -701,7 +702,7 @@ async def handle_pdf(msg: Message):
         await msg.answer(
             "⚠ I couldn't detect this PDF size.\n\n"
             "👉 If it's larger than 20MB, please upload it here:\n"
-            "https://ai-study-companion-bot.fly.dev/upload\n\n"
+            f"{WEB_URL}/upload\n\n"
             "If it's below 20MB, try sending again 👍"
         )
         return
@@ -711,7 +712,7 @@ async def handle_pdf(msg: Message):
             "❌ This PDF is larger than 20MB.\n\n"
             "Telegram does not allow bots to give bots such big files.\n\n"
             "👉 Upload here instead:\n"
-            "https://ai-study-companion-bot.fly.dev/upload\n\n"
+            f"{WEB_URL}/upload\n\n"
             "After upload, I will process it 😊"
         )
         return
@@ -726,7 +727,7 @@ async def handle_pdf(msg: Message):
             await msg.answer(
                 "❌ Telegram refused to send this file.\n\n"
                 "👉 Upload here instead:\n"
-                "https://ai-study-companion-bot.fly.dev/upload"
+                f"{WEB_URL}/upload"
             )
         else:
             await msg.answer("⚠️ Something went wrong while reading the PDF.")
